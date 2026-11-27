@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Promptistan | AI Image Prompts</title>
+<meta name="description" content="Promptistan par ChatGPT, Gemini aur dusre AI tools ke liye aazmaye hue image prompts milte hain.">
+<meta name="theme-color" content="#0B7A4B">
+<link rel="icon" href="logo.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+:root {
+  --bg: #F2F6F3; --surface: #FFFFFF; --fg: #0E1D17; --muted: #4A5F55; --line: #D3DFD8;
+  --accent: #0B7A4B; --accent-fg: #FFFFFF; --mark: #E9A820; --code: #EAF1ED;
+  --hero-a: #DDEFE4; --hero-b: #F2F6F3; --danger: #A32D2D;
+  --display: "Space Grotesk", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0B1411; --surface: #121E19; --fg: #E7F0EB; --muted: #9BB0A5; --line: #22332B;
+    --accent: #3FD98F; --accent-fg: #06180F; --mark: #F2B93B; --code: #0D1813;
+    --hero-a: #0F2A20; --hero-b: #0B1411; --danger: #F09595; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; line-height: 1.12; margin: 0; letter-spacing: -0.01em; }
+p { margin: 0; }
+a { color: inherit; }
+img { max-width: 100%; }
+[hidden] { display: none !important; }
+:focus-visible { outline: 3px solid var(--mark); outline-offset: 2px; }
+.wrap { max-width: 1080px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-block: 16px; flex-wrap: wrap; }
+.brand { display: inline-flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-size: 1.35rem; letter-spacing: -0.02em; text-decoration: none; }
+.brand img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
+.top-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 999px; padding: 12px 22px; font: 600 1rem var(--body); text-decoration: none; cursor: pointer; background: var(--accent); color: var(--accent-fg); }
+.btn:hover { filter: brightness(1.08); }
+.btn:disabled { opacity: 0.6; cursor: default; }
+.btn.ghost { background: transparent; color: var(--fg); border: 1.5px solid var(--line); }
+.btn.ghost:hover { border-color: var(--accent); filter: none; }
+.btn.small { padding: 9px 16px; font-size: 0.9rem; }
+.btn.danger { background: transparent; color: var(--danger); border: 1.5px solid var(--danger); }
+.btn.light { background: var(--accent-fg); color: var(--accent); }
+.hero { background: linear-gradient(165deg, var(--hero-a), var(--hero-b)); }
+.hero-inner { padding-block: 40px 56px; }
+.eyebrow { display: inline-block; font-family: var(--mono); font-size: 0.8rem; color: var(--muted); border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 5px 12px; margin-bottom: 20px; }
+.hero h1 { font-size: clamp(2.2rem, 7vw, 4rem); font-weight: 700; max-width: 14em; }
+.hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, color-mix(in srgb, var(--mark) 55%, transparent) 62%); }
+.lead { color: var(--muted); font-size: 1.1rem; max-width: 36em; margin-top: 18px; }
+.cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px 28px; margin-top: 32px; font-family: var(--mono); font-size: 0.85rem; color: var(--muted); }
+.stats b { color: var(--fg); font-weight: 500; }
+section { padding-block: 56px; }
+.sec-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 28px; }
+.sec-head h2 { font-size: clamp(1.6rem, 4.5vw, 2.3rem); font-weight: 600; }
+.sec-head p { color: var(--muted); max-width: 40em; }
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+.step { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 22px; min-width: 0; }
+.step .n { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); font-weight: 500; }
+.step h3 { font-size: 1.15rem; font-weight: 600; margin: 8px 0 6px; }
+.step p { color: var(--muted); font-size: 0.95rem; }
+.panel { background: var(--surface); border: 1.5px dashed var(--accent); border-radius: 16px; padding: 20px; margin-bottom: 28px; display: flex; flex-direction: column; gap: 18px; }
+.panel h3 { font-size: 1.15rem; font-weight: 600; }
+.hint { color: var(--muted); font-size: 0.9rem; }
+.fields { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px; }
+.fields .full { grid-column: 1 / -1; }
+.field { display: flex; flex-direction: column; gap: 6px; font-size: 0.85rem; color: var(--muted); min-width: 0; }
+.field input[type="text"], .field input[type="password"], .field select, .field textarea { font: 400 1rem var(--body); color: var(--fg); background: var(--bg); border: 1.5px solid var(--line); border-radius: 10px; padding: 10px 12px; width: 100%; }
+.field textarea { min-height: 120px; font-family: var(--mono); font-size: 0.85rem; resize: vertical; }
+.sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; opacity: 0; }
+.prev { width: 140px; max-width: 100%; border-radius: 10px; border: 1px solid var(--line); display: block; }
+.row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.msg { font-size: 0.9rem; color: var(--muted); }
+.msg.err { color: var(--danger); }
+.divider { border: 0; border-top: 1px solid var(--line); margin: 0; }
+.tools { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 24px; }
+.search { flex: 1 1 240px; min-width: 0; }
+.search input { width: 100%; font: 400 1rem var(--body); color: var(--fg); background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px; padding: 11px 18px; }
+.search input::placeholder { color: var(--muted); }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { font: 500 0.9rem var(--body); color: var(--fg); background: var(--surface); border: 1.5px solid var(--line); border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 18px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; min-width: 0; }
+.swatch { height: 150px; position: relative; background: radial-gradient(120% 90% at 20% 0%, rgba(255,255,255,0.35), transparent 60%), linear-gradient(135deg, var(--a), var(--b)); }
+.swatch.has-img { height: auto; background: var(--code); }
+.swatch .pic { display: block; width: 100%; height: auto; }
+.swatch .tag { position: absolute; left: 12px; bottom: 10px; font-family: var(--mono); font-size: 0.75rem; color: #fff; background: rgba(0,0,0,0.5); border-radius: 999px; padding: 3px 10px; }
+.card-body { padding: 16px; display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 0; }
+.card h3 { font-size: 1.1rem; font-weight: 600; }
+.prompt { font-family: var(--mono); font-size: 0.8rem; line-height: 1.65; background: var(--code); border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; flex: 1; }
+.copy { width: 100%; }
+.actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.empty { text-align: center; color: var(--muted); padding: 40px 0; grid-column: 1 / -1; }
+.faq { display: flex; flex-direction: column; gap: 10px; max-width: 760px; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 4px 18px; }
+summary { cursor: pointer; font-weight: 600; padding: 14px 0; }
+details p { color: var(--muted); padding-bottom: 16px; }
+.join-band { background: var(--accent); color: var(--accent-fg); }
+.join-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 20px; padding-block: 44px; }
+.join-inner h2 { font-size: clamp(1.5rem, 4.5vw, 2.1rem); font-weight: 600; max-width: 18em; }
+.join-inner p { opacity: 0.9; margin-top: 8px; }
+footer { padding-block: 28px; color: var(--muted); font-size: 0.85rem; display: flex; flex-direction: column; gap: 6px; }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-size: 0.9rem; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 20; max-width: calc(100% - 32px); }
+.toast.show { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="wrap topbar">
+  <a class="brand" href="#top"><img id="brand-logo" src="logo.png" alt=""><span><span id="brand-name">Promptistan</span></span></a>
+  <div class="top-actions">
+    <button class="btn ghost small" id="edit-btn" type="button">Edit</button>
+    <a class="btn small join" id="join-top" target="_blank" rel="noopener" hidden>Channel Join Karein</a>
+  </div>
+</header>
+
+<div class="hero" id="top">
+  <div class="wrap hero-inner">
+    <span class="eyebrow" id="eyebrow">WhatsApp channel</span>
+    <h1>AI image prompts, bas <em>copy</em> aur paste.</h1>
+    <p class="lead" id="hero-lead"></p>
+    <div class="cta-row">
+      <a class="btn join" id="join-hero" target="_blank" rel="noopener" hidden>WhatsApp Channel Join Karein</a>
+      <a class="btn ghost" href="#prompts">Prompts Dekhein</a>
+    </div>
+    <div class="stats"><span><b id="count">0</b> prompts yahan</span><span>Roz naye prompts channel par</span></div>
+  </div>
+</div>
+
+<section class="wrap" id="how">
+  <div class="sec-head"><h2>Istemal ka tareeqa</h2><p>Koi mushkil nahi. Teen qadam mein tasveer tayyar.</p></div>
+  <div class="steps">
+    <div class="step"><span class="n">Qadam 1</span><h3>Prompt chunein</h3><p>Neeche se apni pasand ki category kholen aur prompt select karein.</p></div>
+    <div class="step"><span class="n">Qadam 2</span><h3>Copy dabayein</h3><p>Ek button se poora prompt copy ho jata hai. Haath se likhne ki zaroorat nahi.</p></div>
+    <div class="step"><span class="n">Qadam 3</span><h3>AI mein paste karein</h3><p>ChatGPT, Gemini ya koi image tool kholen, paste karein aur tasveer banwayen.</p></div>
+  </div>
+</section>
+
+<section class="wrap" id="prompts">
+  <div class="sec-head"><h2>Taaza Prompts</h2><p>Prompts English mein hain, kyun ke zyada tar AI tools English behtar samajhte hain.</p></div>
+
+  <div class="panel" id="token-panel" hidden>
+    <div>
+      <h3>Edit ke liye GitHub token</h3>
+      <p class="hint">Token sirf is browser mein save hota hai. Ye wahi token hai jo aapne GitHub par banaya tha.</p>
+    </div>
+    <div class="fields">
+      <label class="field full" for="tk-input">Token<input id="tk-input" type="password" autocomplete="off" placeholder="github_pat_..."></label>
+    </div>
+    <div class="row">
+      <button class="btn" id="tk-save" type="button">Save Karein</button>
+      <button class="btn ghost" id="tk-cancel" type="button">Band Karein</button>
+      <span class="msg" id="tk-msg" role="status"></span>
+    </div>
+  </div>
+
+  <div class="panel" id="admin" hidden>
+    <div>
+      <h3>Website edit karein</h3>
+      <p class="hint">Ye hissa sirf aapko dikhta hai. Save karte hi sab ke liye badal jata hai.</p>
+    </div>
+    <div class="fields">
+      <label class="field full" for="s-name">Website ka naam<input id="s-name" type="text" maxlength="30"></label>
+      <label class="field full" for="s-bio">Bio (upar wali tarif)<textarea id="s-bio" maxlength="260"></textarea></label>
+      <label class="field full" for="s-chname">Channel ka naam<input id="s-chname" type="text" maxlength="40"></label>
+      <label class="field full" for="s-channel">WhatsApp channel ka link<input id="s-channel" type="text" placeholder="https://whatsapp.com/channel/..."></label>
+      <div class="field full">
+        <span>Logo</span>
+        <div class="row"><label class="btn ghost small" for="s-logo">Logo upload karein</label><span class="msg" id="s-logo-msg"></span></div>
+        <input id="s-logo" class="sr" type="file" accept="image/*">
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn" id="s-save" type="button">Website Save Karein</button>
+      <span class="msg" id="s-msg" role="status"></span>
+    </div>
+    <hr class="divider">
+    <div>
+      <h3 id="f-heading">Naya prompt jodein</h3>
+    </div>
+    <div class="fields">
+      <label class="field full" for="f-title">Prompt ka naam<input id="f-title" type="text" maxlength="60" placeholder="Jaise: Golden Hour Portrait"></label>
+      <label class="field full" for="f-cat">Category
+        <select id="f-cat"><option>Portrait</option><option>Manzar</option><option>Fantasy</option><option>Product</option><option>Khana</option></select>
+      </label>
+      <label class="field full" for="f-text">Prompt (jo AI ko dena hai)<textarea id="f-text" placeholder="Yahan poora prompt paste karein"></textarea></label>
+      <div class="field full">
+        <span>Tasveer (zaroori nahi)</span>
+        <div class="row"><label class="btn ghost" for="f-img">Photo upload karein</label><span class="msg" id="f-img-name"></span></div>
+        <img id="f-img-prev" class="prev" alt="Chuni hui tasveer" hidden>
+        <input id="f-img" class="sr" type="file" accept="image/*">
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn" id="f-save" type="button">Prompt Save Karein</button>
+      <button class="btn ghost" id="f-cancel" type="button" hidden>Radd Karein</button>
+      <span class="msg" id="f-msg" role="status"></span>
+    </div>
+  </div>
+
+  <div class="tools">
+    <div class="search"><input id="q" type="search" placeholder="Prompt talash karein, jaise portrait ya jeep" aria-label="Prompt talash karein" autocomplete="off"></div>
+    <div class="chips" id="chips" role="group" aria-label="Category"></div>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="wrap" id="faq">
+  <div class="sec-head"><h2>Aam sawal</h2></div>
+  <div class="faq">
+    <details><summary>Kaun se AI mein ye prompts chalte hain?</summary><p>Ye prompts ChatGPT, Gemini aur dusre image banane wale tools mein try kiye ja sakte hain. Har tool ka nateeja thora mukhtalif ho sakta hai.</p></details>
+    <details><summary>Tasveer bilkul prompt jaisi na aaye to?</summary><p>Har AI ka apna andaz hota hai. Prompt mein chhoti tabdeeli karein, jaise rang, roshni ya background badal kar dobara try karein.</p></details>
+    <details><summary>Naye prompts kahan milte hain?</summary><p>Naye prompts sab se pehle WhatsApp channel par aate hain. Channel join kar lein taake koi prompt miss na ho.</p></details>
+  </div>
+</section>
+
+<div class="join-band" id="join-band" hidden>
+  <div class="wrap join-inner">
+    <div><h2>Naye prompts pehle channel par</h2><p>Join karein aur har naya prompt seedha WhatsApp par paayein.</p></div>
+    <a class="btn light join" target="_blank" rel="noopener">Channel Join Karein</a>
+  </div>
+</div>
+
+<footer class="wrap">
+  <span><b id="foot-name">Promptistan</b> · AI image prompts ka ghar</span>
+  <span>ChatGPT, Gemini aur dusre naam unki apni companies ke hain. Ye website un se mansloob nahi.</span>
+</footer>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  var OWNER = "abdulrahman47658-ctrl", REPO = "promptistan", BRANCH = "main";
+  var API = "https://api.github.com/repos/" + OWNER + "/" + REPO + "/contents/";
+  var TOKEN_KEY = "promptistan_token";
+  var DATA = { channel: "", site: { name: "Promptistan", bio: "", channelName: "", logo: "" }, prompts: [] };
+  var PALETTE = { Portrait: ["#F2A444", "#8A3B2A"], Manzar: ["#F4A9A0", "#2F7F95"], Fantasy: ["#5FB6E8", "#2B2F7A"], Product: ["#D9B25A", "#0F0F12"], Khana: ["#E8A53A", "#7A2E12"] };
+  var CATS = ["Sab", "Portrait", "Manzar", "Fantasy", "Product", "Khana"];
+  var state = { cat: "Sab", q: "" };
+  var editing = false, editingId = null, pickedFile = null, pendingDelete = null;
+
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, text) { var n = document.createElement(tag); if (cls) n.className = cls; if (text != null) n.textContent = text; return n; }
+  var toastTimer;
+  function toast(msg) { var t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(function () { t.classList.remove("show"); }, 2400); }
+  function hasToken() { try { return !!localStorage.getItem(TOKEN_KEY); } catch (e) { return false; } }
+  function token() { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } }
+  function hasRealChannel() { return DATA.channel && DATA.channel.indexOf("YOUR_CHANNEL_LINK") < 0; }
+
+  function b64FromText(s) { return btoa(unescape(encodeURIComponent(s))); }
+
+  function gh(method, path, body) {
+    var opts = { method: method, headers: { Authorization: "Bearer " + token(), Accept: "application/vnd.github+json" } };
+    if (body) { opts.headers["Content-Type"] = "application/json"; opts.body = JSON.stringify(body); }
+    return fetch(API + path + (method === "GET" ? "?ref=" + BRANCH + "&t=" + Date.now() : ""), opts).then(function (r) {
+      if (!r.ok) { var e = new Error("gh " + r.status); e.status = r.status; throw e; }
+      return r.json();
+    });
+  }
+  function errText(e) {
+    if (e && e.status === 401) return "Token galat hai ya expire ho gaya. Token dobara save karein.";
+    if (e && e.status === 403) return "Token ko is repository mein likhne ki ijazat nahi. Permission Contents: Read and write honi chahiye.";
+    if (e && e.status === 404) return "Repository ya file nahi mili. Pages ki setting aur repository ka naam dekhein.";
+    if (e && e.status === 409) return "Kisi aur ne abhi badlav kiya hai. Page refresh karke dobara try karein.";
+    return "Save nahi hua. Internet dekh kar dobara koshish karein.";
+  }
+
+  // Save the whole data file to GitHub, reading the latest version first.
+  function saveData(next, msgEl) {
+    function say(t, bad) { if (msgEl) { msgEl.textContent = t; msgEl.classList.toggle("err", !!bad); } else toast(t); }
+    say("Save ho raha hai...");
+    return gh("GET", "prompts.json").then(function (f) {
+      var body = { message: "Update prompts", content: b64FromText(JSON.stringify(next, null, 1)), branch: BRANCH, sha: f.sha };
+      return gh("PUT", "prompts.json", body);
+    }).then(function () {
+      DATA = next; applySite(); render(); say("Save ho gaya. Kuch der mein sab ko dikhega.");
+      return true;
+    }).catch(function (e) { say(errText(e), true); return false; });
+  }
+
+  function readImage(file, maxW, quality) {
+    return new Promise(function (resolve, reject) {
+      var r = new FileReader();
+      r.onerror = reject;
+      r.onload = function () {
+        var img = new Image();
+        img.onerror = reject;
+        img.onload = function () {
+          var w = Math.min(maxW, img.width), h = Math.round(img.height * w / img.width);
+          var c = document.createElement("canvas"); c.width = w; c.height = h;
+          c.getContext("2d").drawImage(img, 0, 0, w, h);
+          resolve(c.toDataURL("image/jpeg", quality).split(",")[1]);
+        };
+        img.src = r.result;
+      };
+      r.readAsDataURL(file);
+    });
+  }
+  function uploadImage(file, path, msgEl) {
+    if (msgEl) msgEl.textContent = "Tasveer upload ho rahi hai...";
+    return readImage(file, 900, 0.85).then(function (b64) {
+      return gh("PUT", path, { message: "Add image " + path, content: b64, branch: BRANCH });
+    }).then(function () { return path; })
+      .catch(function (e) { if (msgEl) msgEl.textContent = errText(e); return null; });
+  }
+
+  function applySite() {
+    var s = DATA.site || {};
+    $("brand-name").textContent = s.name || "Promptistan";
+    $("foot-name").textContent = s.name || "Promptistan";
+    if (s.bio) $("hero-lead").textContent = s.bio;
+    $("eyebrow").textContent = "WhatsApp channel: " + (s.channelName || "");
+    var lg = $("brand-logo");
+    if (s.logo) lg.src = s.logo; else lg.src = "logo.png";
+    $("count").textContent = DATA.prompts.length;
+    $("count").parentNode.hidden = !DATA.prompts.length;
+    var real = hasRealChannel();
+    ["join-top", "join-hero"].forEach(function (id) { var a = $(id); a.href = DATA.channel; a.hidden = !real; });
+    var band = $("join-band"); band.hidden = !real;
+    band.querySelector("a").href = DATA.channel;
+  }
+
+  function copyPrompt(text, btn, pre) {
+    function done() { var old = btn.textContent; btn.textContent = "Copy ho gaya"; toast("Prompt copy ho gaya. Ab AI mein paste karein."); setTimeout(function () { btn.textContent = old; }, 1800); }
+    function fallback() {
+      try { var r = document.createRange(); r.selectNodeContents(pre); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); if (document.execCommand && document.execCommand("copy")) { done(); return; } } catch (e) {}
+      toast("Prompt select ho gaya. Ab copy kar lein.");
+    }
+    try { navigator.clipboard.writeText(text).then(done, fallback); } catch (e) { fallback(); }
+  }
+
+  function render() {
+    var grid = $("grid");
+    var q = state.q.trim().toLowerCase();
+    var list = DATA.prompts.filter(function (p) {
+      var okCat = state.cat === "Sab" || p.cat === state.cat;
+      var okQ = !q || (p.title + " " + p.text + " " + p.cat).toLowerCase().indexOf(q) !== -1;
+      return okCat && okQ;
+    });
+    grid.textContent = "";
+    if (!list.length) {
+      grid.appendChild(el("p", "empty", DATA.prompts.length ? "Is naam ka koi prompt nahi mila. Doosra lafz try karein." : (editing ? "Abhi koi prompt nahi hai. Upar wale box se pehla prompt jodein." : "Naye prompts jald aa rahe hain.")));
+      return;
+    }
+    list.forEach(function (p) {
+      var card = el("article", "card");
+      var sw = el("div", "swatch");
+      sw.style.setProperty("--a", p.a); sw.style.setProperty("--b", p.b);
+      if (p.img) {
+        sw.classList.add("has-img");
+        var im = el("img", "pic"); im.src = p.img; im.alt = p.title; im.loading = "lazy";
+        sw.appendChild(im);
+      }
+      sw.appendChild(el("span", "tag", p.cat));
+      var body = el("div", "card-body");
+      body.appendChild(el("h3", "", p.title));
+      var pre = el("p", "prompt", p.text);
+      var btn = el("button", "btn copy", "Prompt Copy Karein"); btn.type = "button";
+      btn.addEventListener("click", function () { copyPrompt(p.text, btn, pre); });
+      body.appendChild(pre); body.appendChild(btn);
+      if (editing) {
+        var acts = el("div", "actions");
+        var ed = el("button", "btn ghost small", "Badlein"); ed.type = "button";
+        ed.addEventListener("click", function () { startEdit(p); });
+        var del = el("button", "btn danger small", pendingDelete === p.id ? "Pakka hatayein?" : "Hatayein"); del.type = "button";
+        del.addEventListener("click", function () {
+          if (pendingDelete !== p.id) { pendingDelete = p.id; render(); return; }
+          pendingDelete = null;
+          saveData({ channel: DATA.channel, site: DATA.site, prompts: DATA.prompts.filter(function (x) { return x.id !== p.id; }) }, null);
+        });
+        acts.appendChild(ed); acts.appendChild(del); body.appendChild(acts);
+      }
+      card.appendChild(sw); card.appendChild(body); grid.appendChild(card);
+    });
+  }
+
+  function renderChips() {
+    var box = $("chips"); box.textContent = "";
+    CATS.forEach(function (c) {
+      var b = el("button", "chip", c); b.type = "button";
+      b.setAttribute("aria-pressed", c === state.cat ? "true" : "false");
+      b.addEventListener("click", function () { state.cat = c; renderChips(); render(); });
+      box.appendChild(b);
+    });
+  }
+
+  function setEditing(on) {
+    editing = on;
+    $("admin").hidden = !on;
+    $("edit-btn").textContent = on ? "Band karein" : "Edit";
+    if (on) { fillSite(); resetForm(); }
+    render();
+  }
+
+  function fillSite() {
+    var s = DATA.site || {};
+    $("s-name").value = s.name || "";
+    $("s-bio").value = s.bio || "";
+    $("s-chname").value = s.channelName || "";
+    $("s-channel").value = hasRealChannel() ? DATA.channel : "";
+    $("s-logo-msg").textContent = "";
+  }
+
+  function showPrev(src) { var im = $("f-img-prev"); if (src) { im.src = src; im.hidden = false; } else im.hidden = true; }
+  function resetForm() {
+    editingId = null; pickedFile = null;
+    $("f-img").value = ""; $("f-img-name").textContent = ""; showPrev("");
+    $("f-title").value = ""; $("f-text").value = ""; $("f-cat").value = "Portrait";
+    $("f-heading").textContent = "Naya prompt jodein";
+    $("f-save").textContent = "Prompt Save Karein";
+    $("f-cancel").hidden = true; $("f-msg").textContent = ""; $("f-save").disabled = false;
+  }
+  function startEdit(p) {
+    resetForm();
+    editingId = p.id;
+    $("f-title").value = p.title; $("f-text").value = p.text; $("f-cat").value = p.cat;
+    $("f-heading").textContent = "Prompt badlein";
+    $("f-save").textContent = "Badlav Save Karein";
+    $("f-cancel").hidden = false;
+    if (p.img) { $("f-img-name").textContent = "Purani tasveer lagi hai"; showPrev(p.img); }
+    $("admin").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  $("f-img").addEventListener("change", function () {
+    pickedFile = this.files[0] || null;
+    $("f-img-name").textContent = pickedFile ? pickedFile.name : "";
+    if (pickedFile) showPrev(URL.createObjectURL(pickedFile));
+  });
+  $("f-cancel").addEventListener("click", resetForm);
+
+  $("f-save").addEventListener("click", function () {
+    var title = $("f-title").value.trim(), text = $("f-text").value.trim(), msg = $("f-msg");
+    if (!title || !text) { msg.textContent = "Naam aur prompt dono likhna zaroori hai."; msg.classList.add("err"); return; }
+    msg.classList.remove("err");
+    var cat = $("f-cat").value, old = null;
+    if (editingId) DATA.prompts.forEach(function (x) { if (x.id === editingId) old = x; });
+    var pal = PALETTE[cat] || PALETTE.Portrait;
+    var p = { id: old ? old.id : "p" + Date.now().toString(36), cat: cat, title: title, a: old ? old.a : pal[0], b: old ? old.b : pal[1], text: text };
+    if (old && old.img) p.img = old.img;
+    $("f-save").disabled = true;
+    var up = pickedFile ? uploadImage(pickedFile, "images/" + p.id + ".jpg", msg) : Promise.resolve(null);
+    up.then(function (path) {
+      if (pickedFile && !path) { $("f-save").disabled = false; return false; }
+      if (path) p.img = path;
+      var list = old ? DATA.prompts.map(function (x) { return x.id === old.id ? p : x; }) : [p].concat(DATA.prompts);
+      return saveData({ channel: DATA.channel, site: DATA.site, prompts: list }, msg).then(function (ok) {
+        if (ok) resetForm(); else $("f-save").disabled = false;
+      });
+    });
+  });
+
+  $("s-logo").addEventListener("change", function () {
+    var f = this.files[0]; if (!f) return;
+    var path = "images/logo-" + Date.now().toString(36) + ".jpg";
+    uploadImage(f, path, $("s-logo-msg")).then(function (p) {
+      if (!p) return;
+      $("s-logo-msg").textContent = "Logo upload ho gaya. Ab website save karein.";
+      DATA.site.logo = p;
+      $("brand-logo").src = p;
+    });
+  });
+
+  $("s-save").addEventListener("click", function () {
+    var name = $("s-name").value.trim();
+    var msg = $("s-msg");
+    if (!name) { msg.textContent = "Website ka naam likhna zaroori hai."; msg.classList.add("err"); return; }
+    var ch = $("s-channel").value.trim();
+    if (ch && !/^https:\/\//.test(ch)) { msg.textContent = "Link https:// se shuru hona chahiye."; msg.classList.add("err"); return; }
+    var site = { name: name, bio: $("s-bio").value.trim(), channelName: $("s-chname").value.trim(), logo: DATA.site.logo || "" };
+    saveData({ channel: ch || "", site: site, prompts: DATA.prompts }, msg);
+  });
+
+  // Token handling
+  function openTokenPanel() { $("token-panel").hidden = false; $("tk-input").value = ""; $("tk-msg").textContent = ""; $("tk-input").focus(); }
+  $("tk-cancel").addEventListener("click", function () { $("token-panel").hidden = true; });
+  $("tk-save").addEventListener("click", function () {
+    var v = $("tk-input").value.trim(), msg = $("tk-msg");
+    if (!v) { msg.textContent = "Token likhein."; return; }
+    try { localStorage.setItem(TOKEN_KEY, v); } catch (e) { msg.textContent = "Browser mein save nahi ho saka."; return; }
+    msg.textContent = "Check ho raha hai...";
+    gh("GET", "prompts.json").then(function () {
+      $("token-panel").hidden = true;
+      setEditing(true);
+    }).catch(function (e) {
+      try { localStorage.removeItem(TOKEN_KEY); } catch (x) {}
+      msg.textContent = errText(e);
+    });
+  });
+
+  $("edit-btn").addEventListener("click", function () {
+    if (editing) { setEditing(false); return; }
+    if (hasToken()) { setEditing(true); } else { openTokenPanel(); }
+  });
+
+  $("q").addEventListener("input", function (e) { state.q = e.target.value; render(); });
+
+  // Start: load data from the published file.
+  fetch("prompts.json?v=" + Date.now(), { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (d) {
+    DATA = d;
+    if (!DATA.site) DATA.site = { name: "Promptistan", bio: "", channelName: "", logo: "" };
+    if (!DATA.prompts) DATA.prompts = [];
+    applySite(); renderChips(); render();
+  }).catch(function () { toast("Data load nahi hua. Page refresh karein."); });
+})();
+</script>
+</body>
+</html>
