@@ -8,6 +8,15 @@
  },
  "prompts": [
   {
+   "id": "pmwybd6xr",
+   "cat": "Portrait",
+   "title": "Dramatic Shadow Sofa Portrait",
+   "a": "#F2A444",
+   "b": "#8A3B2A",
+   "text": "A dramatic black and white cinematic wide-medium shot of a man sitting on a dark sofa against a plain wall. A sharp diagonal beam of light cuts through the darkness, illuminating him as he sits with his head tilted back and his hand covering his eyes in distress or exhaustion. Wearing a traditional collared shalwar kameez, moody atmosphere, high contrast, deep shadows, dramatic storytelling photography.",
+   "img": "images/pmwybd6xr.jpg"
+  },
+  {
    "id": "p9a",
    "cat": "Portrait",
    "title": "Garden Staircase Fashion Portrait",
